@@ -9,8 +9,15 @@
       font-family: Arial, Helvetica, sans-serif;
       background-color: rgb(36, 41, 56);
       color: rgb(173,215,255);
-      text-align: center;
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
       padding: 1em;
+    }
+    #app {
+      width: 800px;
+      max-width: 100%;
     }
     h1 {
       color: rgb(225,237,248);
@@ -19,7 +26,11 @@
       color: rgb(166,172,205);
     }
     h4 {
+      font-size: 1.4rem;
       color: rgb(50,174,133);
+    }
+    pre {
+      font-size: 1.2rem;
     }
   </style>
 </head>
@@ -48,9 +59,9 @@
               app.appendChild(inputLabel)
               // populate the list
               inputs.forEach(input => {
-                const p = document.createElement('p')
-                p.innerText = input.label
-                app.appendChild(p)
+                const pre = document.createElement('pre')
+                pre.innerText = JSON.stringify(input, null, 2) 
+                app.appendChild(pre)
               })
               // check for outputs
               const outputs = devices.filter(device => device.kind === 'audiooutput')
@@ -67,9 +78,9 @@
               } else {
                 // populate outputs list
                 outputs.forEach(output => {
-                  const p = document.createElement('p')
-                  p.innerText = output.label
-                  app.appendChild(p)
+                  const pre = document.createElement('pre')
+                  pre.innerText = JSON.stringify(output, null, 2)
+                  app.appendChild(pre)
                 })
               }
             // log the stream object for further inspection 
