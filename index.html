@@ -19,7 +19,7 @@
       color: rgb(166,172,205);
     }
     h4 {
-      color: rgb(50,174,133)
+      color: rgb(50,174,133);
     }
   </style>
 </head>
@@ -41,7 +41,7 @@
           navigator.mediaDevices.enumerateDevices()
             .then(devices => {
               // check for inputs
-              const inputs = devices.filter(device => device.kind === 'audioinput');
+              const inputs = devices.filter(device => device.kind === 'audioinput')
               // create label for input list
               const inputLabel = document.createElement('h4')
               inputLabel.innerText = 'Inputs'
@@ -49,8 +49,8 @@
               // populate the list
               inputs.forEach(input => {
                 const p = document.createElement('p')
-                p.innerText = input.label;
-                app.appendChild(p);
+                p.innerText = input.label
+                app.appendChild(p)
               })
               // check for outputs
               const outputs = devices.filter(device => device.kind === 'audiooutput')
@@ -61,15 +61,15 @@
 
               if(!outputs.length) {
                 // outputs not available
-                const p = document.createElement('p');
+                const p = document.createElement('p')
                 p.innerText = "Your browser does not support selecting an audio output. Please configure your device's audio settings."
                 app.appendChild(p)
               } else {
                 // populate outputs list
                 outputs.forEach(output => {
                   const p = document.createElement('p')
-                  p.innerText = output.label;
-                  app.appendChild(p);
+                  p.innerText = output.label
+                  app.appendChild(p)
                 })
               }
             // log the stream object for further inspection 
