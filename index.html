@@ -3,71 +3,91 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
+  <title>Media Devices browser test</title>
   <style>
     body {
       font-family: Arial, Helvetica, sans-serif;
-      background-color: rgb(40, 40, 40);
-      color: #fff;
+      background-color: rgb(36, 41, 56);
+      color: rgb(173,215,255);
       text-align: center;
+      padding: 1em;
     }
-    .warning {
-      color: rgb(255, 126, 126);
+    h1 {
+      color: rgb(225,237,248);
+    }
+    p {
+      color: rgb(166,172,205);
+    }
+    h4 {
+      color: rgb(50,174,133)
     }
   </style>
 </head>
 <body>
-  <div id="app">
-    <h1>Media Devices</h1>
-  </div>
+  <div id="app"></div>
   <script>
-    const app = document.getElementById('app');
+    const app = document.getElementById('app')
     if(navigator.mediaDevices){
       app.innerHTML = '<h1>navigator.mediaDevices supported</h1>'
+      // request permission from user
       navigator.mediaDevices.getUserMedia({audio: true})
         .then(stream => {
+          // inform user
           const h2 = document.createElement('h2')
-          h2.innerText = 'stream successfully obtained. your available devices are:'
+          h2.innerText = 'Stream successfully obtained. Your available devices are:'
           app.appendChild(h2)
+
+          // query available devices
           navigator.mediaDevices.enumerateDevices()
-          .then(devices => {
-            const inputs = devices.filter(device => device.kind === 'audioinput')
-            const h4 = document.createElement('h4')
-            h4.innerText = 'Inputs'
-            app.appendChild(h4)
-            inputs.forEach(input => {
-              const p = document.createElement('p')
-              p.innerText = input.label;
-              app.appendChild(p);
-            })
-            const h4Outs = document.createElement('h4')
-            h4Outs.innerText = 'Outputs'
-            app.appendChild(h4Outs)
-            const outputs = devices.filter(device => device.kind === 'audiooutput');
-            if(!outputs.length) {
-              const h3 = document.createElement('h3');
-              h3.classList.add('warning')
-              h3.innerText = "Your browser does not support selecting an audio output. Please configure your device's audio settings."
-              app.appendChild(h3)
-            } else {
-              outputs.forEach(output => {
+            .then(devices => {
+              // check for inputs
+              const inputs = devices.filter(device => device.kind === 'audioinput');
+              // create label for input list
+              const inputLabel = document.createElement('h4')
+              inputLabel.innerText = 'Inputs'
+              app.appendChild(inputLabel)
+              // populate the list
+              inputs.forEach(input => {
                 const p = document.createElement('p')
-                p.innerText = output.label;
+                p.innerText = input.label;
                 app.appendChild(p);
               })
-            }
-          console.log(stream)
-          })
+              // check for outputs
+              const outputs = devices.filter(device => device.kind === 'audiooutput')
+              // label for output list
+              const outputLabel = document.createElement('h4')
+              outputLabel.innerText = 'Outputs'
+              app.appendChild(outputLabel)
+
+              if(!outputs.length) {
+                // outputs not available
+                const p = document.createElement('p');
+                p.innerText = "Your browser does not support selecting an audio output. Please configure your device's audio settings."
+                app.appendChild(p)
+              } else {
+                // populate outputs list
+                outputs.forEach(output => {
+                  const p = document.createElement('p')
+                  p.innerText = output.label;
+                  app.appendChild(p);
+                })
+              }
+            // log the stream object for further inspection 
+            console.log(stream)
+            })
         })
         .catch(e => console.log(e))
     } 
     else {
+      // your browser is old
       app.innerHTML = '<h1>navigator.mediaDevices not supprted</h1>'
+      // this still works in some browsers
       navigator.getUserMedia({audio: true}, (stream) => {
         const h3 = document.createElement('h3')
         h3.innerText = 'Stream obtained.'
         app.appendChild(h3)
-        console.log(stream);
+        // log the stream object
+        console.log(stream)
       })
     } 
   </script>
