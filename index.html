@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <div id="app">
+    <h1>Hello</h1>
+  </div>
+  <script>
+    const app = document.getElementById('app');
+    if(navigator.mediaDevices){
+      app.innerHTML = '<h1>media devices supported - no stream</h1>'
+      navigator.mediaDevices.getUserMedia({audio: true})
+        .then(stream => {
+          app.innerHTML = '<h1>media devices - success</h1><p>stream is obtained</p>'
+          console.log(stream)
+        })
+        .catch(e => console.log(e))
+    } 
+    else {
+      app.innerHTML = '<h1>navigator.mediaDevices not supprted</h1>'
+      navigator.getUserMedia({audio: true}, (stream) => {
+        app.innerHTML = '<h1>get user media - success</h1>'
+        console.log(stream);
+      })
+    } 
+    
+  </script>
+</body>
+</html>
