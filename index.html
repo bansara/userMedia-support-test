@@ -4,30 +4,72 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
+  <style>
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background-color: rgb(40, 40, 40);
+      color: #fff;
+      text-align: center;
+    }
+    .warning {
+      color: rgb(255, 126, 126);
+    }
+  </style>
 </head>
 <body>
   <div id="app">
-    <h1>Hello</h1>
+    <h1>Media Devices</h1>
   </div>
   <script>
     const app = document.getElementById('app');
     if(navigator.mediaDevices){
-      app.innerHTML = '<h1>media devices supported - no stream</h1>'
+      app.innerHTML = '<h1>navigator.mediaDevices supported</h1>'
       navigator.mediaDevices.getUserMedia({audio: true})
         .then(stream => {
-          app.innerHTML = '<h1>media devices - success</h1><p>stream is obtained</p>'
+          const h2 = document.createElement('h2')
+          h2.innerText = 'stream successfully obtained. your available devices are:'
+          app.appendChild(h2)
+          navigator.mediaDevices.enumerateDevices()
+          .then(devices => {
+            const inputs = devices.filter(device => device.kind === 'audioinput')
+            const h4 = document.createElement('h4')
+            h4.innerText = 'Inputs'
+            app.appendChild(h4)
+            inputs.forEach(input => {
+              const p = document.createElement('p')
+              p.innerText = input.label;
+              app.appendChild(p);
+            })
+            const h4Outs = document.createElement('h4')
+            h4Outs.innerText = 'Outputs'
+            app.appendChild(h4Outs)
+            const outputs = devices.filter(device => device.kind === 'audiooutput');
+            if(!outputs.length) {
+              const h3 = document.createElement('h3');
+              h3.classList.add('warning')
+              h3.innerText = "Your browser does not support selecting an audio output. Please configure your device's audio settings."
+              app.appendChild(h3)
+            } else {
+              outputs.forEach(output => {
+                const p = document.createElement('p')
+                p.innerText = output.label;
+                app.appendChild(p);
+              })
+            }
           console.log(stream)
+          })
         })
         .catch(e => console.log(e))
     } 
     else {
       app.innerHTML = '<h1>navigator.mediaDevices not supprted</h1>'
       navigator.getUserMedia({audio: true}, (stream) => {
-        app.innerHTML = '<h1>get user media - success</h1>'
+        const h3 = document.createElement('h3')
+        h3.innerText = 'Stream obtained.'
+        app.appendChild(h3)
         console.log(stream);
       })
     } 
-    
   </script>
 </body>
 </html>
