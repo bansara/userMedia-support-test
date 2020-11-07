@@ -94,19 +94,27 @@
     else {
       // your browser is old
       app.innerHTML = '<h1>navigator.mediaDevices not supported</h1>'
-      // this still works in some browsers
-      navigator.getUserMedia({audio: true}, (stream) => {
-        const h3 = document.createElement('h3')
-        h3.innerText = 'Stream obtained.'
-        app.appendChild(h3)
-        // log the stream object
-        console.log(stream)
-      }, (e) => {
+
+      if(!navigator.getUserMedia) {
         const h3 = document.createElement('h3')
         h3.innerText = "Audio Input not supported. Check device and browser permissions or try another browser."
         app.appendChild(h3)
-        console.log(e)
-      })
+      } else {
+        // this still works in some browsers
+        navigator.getUserMedia({audio: true}, (stream) => {
+          const h3 = document.createElement('h3')
+          h3.innerText = 'Stream obtained.'
+          app.appendChild(h3)
+          // log the stream object
+          console.log(stream)
+        }, (e) => {
+          const h3 = document.createElement('h3')
+          h3.innerText = "Error getting microphone access."
+          app.appendChild(h3)
+          console.log(e)
+        })
+
+      }
     } 
   </script>
 </body>
